@@ -8,10 +8,20 @@ using System.Text;
 namespace wcf_chat
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IServiceChat" in both code and config file together.
-    [ServiceContract]
+    [ServiceContract(CallbackContract =typeof(IServerChatcallback))]
     public interface IServiceChat
     {
         [OperationContract]
-        void DoWork();
+        int Connect(string name);
+        [OperationContract]
+        void Disconnect(int id);
+        [OperationContract(IsOneWay =true)]
+        void SendMsg(string msg,int id);
     }
+    public interface IServerChatcallback
+    {
+        [OperationContract(IsOneWay =true)]
+        void MsgCallback(string msg);
+    }
+        
 }
